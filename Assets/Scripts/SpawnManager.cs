@@ -7,8 +7,8 @@ public class SpawnManager : MonoBehaviour
     //public variables
     public int enemyCount;
     public int waveNumber = 1;
-    public GameObject enemyPrefab;
-    public GameObject powerupPrefab;
+    public GameObject[] enemyPrefab; //gameobject array
+    public GameObject[] powerupPrefab; //gameobject array
 
     //private variables
     private float spawnRange = 9.0f;
@@ -42,15 +42,20 @@ public class SpawnManager : MonoBehaviour
         //keep looping until condition met 
         for (int i = 0; i < enemiesToSpawn; i++)
         {
-            //spawns enemy with proper rotation in random position
-            Instantiate(enemyPrefab, GenerateSpawnPosition(), enemyPrefab.transform.rotation);
+            //random enemy from array
+            int randomEnemy = Random.Range(0, enemyPrefab.Length);
+
+            //spawns random enemy from array with proper rotation in random position
+            Instantiate(enemyPrefab[randomEnemy], GenerateSpawnPosition(), enemyPrefab[randomEnemy].transform.rotation);
         }
     }
 
     void SpawnPowerup()
     {
-        //spawns powerup with proper rotation in random position
-        Instantiate(powerupPrefab, GenerateSpawnPosition(), powerupPrefab.transform.rotation);
+        //random array index
+        int randomPowerup = Random.Range(0,powerupPrefab.Length);
+        //spawns random powerup with proper rotation in random position
+        Instantiate(powerupPrefab[randomPowerup], GenerateSpawnPosition(), powerupPrefab[randomPowerup].transform.rotation);
     }
 
     //method that generates the random vector3 position for spawn range
