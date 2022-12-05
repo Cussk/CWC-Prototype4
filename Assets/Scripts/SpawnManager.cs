@@ -7,6 +7,9 @@ public class SpawnManager : MonoBehaviour
     //public variables
     public int enemyCount;
     public int waveNumber = 1;
+    public int bossRound;
+    public GameObject bossPrefab;
+    public GameObject[] miniEnemyPrefabs;
     public GameObject[] enemyPrefab; //gameobject array
     public GameObject[] powerupPrefab; //gameobject array
 
@@ -32,7 +35,17 @@ public class SpawnManager : MonoBehaviour
         if (enemyCount == 0)
         {
             waveNumber++; //increases wave number by 1 on each iteration
-            SpawnEnemyWave(waveNumber); //spawn more enemies with each iteration
+
+            //Spawn a boss every x number of waves
+            if (waveNumber % bossRound == 0)
+            {
+               SpawnBossWave(waveNumber);
+            }
+            else
+            {
+               SpawnEnemyWave(waveNumber); //spawn more enemies with each iteration
+            }
+
             SpawnPowerup();
         }
     }
@@ -67,5 +80,39 @@ public class SpawnManager : MonoBehaviour
         Vector3 randomPos = new Vector3(spawnPosX, 0, spawnPosZ);
 
         return randomPos;
+    }
+
+    //spawns boss with ability to spawn mini enemies
+    void SpawnBossWave(int currentRound)
+    {
+        int miniEnemysToSpawn;
+        
+        //if it is a boss round
+        if (bossRound != 0)
+        {
+            //variable equal to currentround divided by boss round
+            miniEnemysToSpawn = currentRound / bossRound;
+        }
+        else
+        {
+            miniEnemysToSpawn = 1;
+        }
+
+        //boss variable to spawn boss prefab
+        var boss = Instantiate(bossPrefab, GenerateSpawnPosition(), bossPrefab.transform.rotation);
+
+        //get miniEnemySpawnCount from enemy script and make equal to miniEnemysToSpawn variable
+        boss.GetComponent<Enemy>().miniEnemySpawnCount = miniEnemysToSpawn;
+    }
+
+    //spawns random mini enemy
+    public void SpawnMiniEnemy(int amount)
+    {
+        //loops amount of mini enemies spawned until argument amount reached
+        for (int i =0; i < amount; i++)
+        {
+            int randomMini = Random.Range(0, miniEnemyPrefabs.Length);
+            Instantiate(miniEnemyPrefabs[randomMini], GenerateSpawnPosition(), miniEnemyPrefabs[randomMini].transform.rotation);
+        }
     }
 }

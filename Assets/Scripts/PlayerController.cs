@@ -11,12 +11,12 @@ public class PlayerController : MonoBehaviour
     public float explosionForce;
     public float explosionRadius;
     public bool hasPowerup;
+    public bool smashing = false;
     public GameObject powerupIndicator;
     public GameObject rocketPrefab;
     public PowerUpType currentPowerup = PowerUpType.None; //sets initial powerup to no powerups
 
     //private variables
-    private bool smashing = false;
     private float floorY;
     private float powerupStrength = 15.0f;
     private Rigidbody playerRb;
@@ -50,7 +50,7 @@ public class PlayerController : MonoBehaviour
         //if powerup type is smash and player pushes space bar run smash coroutine
         if (currentPowerup == PowerUpType.Smash && Input.GetKeyDown(KeyCode.Space)) 
         {
-            smashing= true;
+            smashing = true;
             StartCoroutine(Smash());
         }
 
